@@ -29,6 +29,9 @@ public class MetronomeActivity extends AppCompatActivity {
 
     private boolean isPlaying;
 
+    private int bpm = 120;
+    private int meter = 4;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,10 +45,10 @@ public class MetronomeActivity extends AppCompatActivity {
         final SeekBar tempoSlider = (SeekBar)findViewById(R.id.tempoSlider);
         final SeekBar meterSlider = (SeekBar)findViewById(R.id.meterSlider);
 
-        tempoDisplay.setText("120");
-        tempoSlider.setProgress(120);
-        meterDisplay.setText("4");
-        meterSlider.setProgress(4);
+        tempoDisplay.setText(Integer.toString(bpm));
+        tempoSlider.setProgress((short)bpm);
+        meterDisplay.setText(Integer.toString(meter));
+        meterSlider.setProgress((short)meter);
 
         playButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -57,6 +60,7 @@ public class MetronomeActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 System.out.println(progress);
+                bpm = progress;
                 tempoSlider.setProgress(progress);
                 tempoDisplay.setText(Integer.toString(progress));
                 metroTask.setBpm((short)progress);
@@ -77,6 +81,7 @@ public class MetronomeActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 System.out.println(progress);
+                meter = progress;
                 meterSlider.setProgress(progress);
                 meterDisplay.setText(Integer.toString(progress));
                 metroTask.setBeat((short)progress);
@@ -111,8 +116,6 @@ public class MetronomeActivity extends AppCompatActivity {
         }
     }
 
-    // have in mind that: http://stackoverflow.com/questions/11407943/this-handler-class-should-be-static-or-leaks-might-occur-incominghandler
-    // in this case we should be fine as no delayed messages are queued
     private Handler getHandler() {
         return new Handler() {
             @Override
@@ -136,9 +139,9 @@ public class MetronomeActivity extends AppCompatActivity {
         }
 
         protected String doInBackground(Void... params) {
-            metronome.setBeat(4);
+            metronome.setBeat(meter);
 //            metronome.setNoteValue(16);
-            metronome.setBpm(120);
+            metronome.setBpm(bpm);
             metronome.setBeatSound(440.0);
             metronome.setSound(880.0);
 
@@ -165,7 +168,5 @@ public class MetronomeActivity extends AppCompatActivity {
             if(metronome != null)
                 metronome.setBeat(beat);
         }
-
     }
-
 }

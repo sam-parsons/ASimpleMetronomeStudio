@@ -71,6 +71,7 @@ public class Metronome {
         audioGenerator.destroyAudioTrack();
     }
 
+    // Getters N Setters
     public double getBpm() {
         return bpm;
     }
@@ -110,6 +111,4 @@ public class Metronome {
     public void setSound(double sound2) {
         this.sound = sound2;
     }
-
-
 }
